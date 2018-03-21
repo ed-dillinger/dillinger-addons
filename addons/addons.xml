@@ -1,5 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
 <addons>
+<addon id="repository.dillinger" name="Ed Dillinger Repository" provider-name="EDDillinger" version="1.0.0">
+    <extension name="Ed Dillinger Repository" point="xbmc.addon.repository">
+        <info compressed="false">https://raw.githubusercontent.com/ed-dillinger/dillinger-addons/master/addons/addons.xml</info>
+        <checksum>https://raw.githubusercontent.com/ed-dillinger/dillinger-addons/master/addons/addons.xml.md5</checksum>
+        <datadir zip="true">https://raw.githubusercontent.com/ed-dillinger/dillinger-addons/master/addons/</datadir>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary>Addons by EDDillinger</summary>
+        <description>Addons by EDDillinger. Please visit www.tvaddons.co for support!</description>
+        <platform>all</platform>
+    </extension>
+</addon>
 <addon id="script.module.commoncore" name="CommonCore" provider-name="EDDillinger" version="0.1.0">
     <requires>
         <import addon="xbmc.python" version="2.1.0" />
