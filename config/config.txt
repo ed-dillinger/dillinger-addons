@@ -1,0 +1,10 @@
+[git]
+git_host = github.com
+git_username = ed-dillinger
+
+[addons]
+# addons - A comma separated list of addons to include in the repo
+addons_list = script.module.commoncore
+ 
+
+

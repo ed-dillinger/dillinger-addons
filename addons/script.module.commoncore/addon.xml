@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<addon id="script.module.commoncore" name="CommonCore" provider-name="EDDillinger" version="0.1.0">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0" />
+        <import addon="script.module.requests" />
+        <import addon="script.module.myconnpy" />
+    </requires>
+    <extension library="lib" point="xbmc.python.module" />
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">CommonCore</summary>
+        <description lang="en">Not your grandmother's math.</description>
+        <disclaimer lang="en" />
+        <language />
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <forum>http://tvaddons.co/forums</forum>
+        <website>http://www.tvaddons.co/</website>
+    </extension>
+</addon>
