@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<addon id="script.module.commoncore" name="CommonCore" provider-name="EDDillinger" version="0.1.0">
+<addon id="script.module.commoncore" name="CommonCore" provider-name="tvaddons" version="0.1.1">
     <requires>
         <import addon="xbmc.python" version="2.1.0" />
         <import addon="script.module.requests" />
@@ -11,9 +11,8 @@
         <summary lang="en">CommonCore</summary>
         <description lang="en">Not your grandmother's math.</description>
         <disclaimer lang="en" />
-        <language />
         <platform>all</platform>
-        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
         <forum>http://tvaddons.co/forums</forum>
         <website>http://www.tvaddons.co/</website>
     </extension>

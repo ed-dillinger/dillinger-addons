@@ -1,10 +1,11 @@
 [git]
+# source location
 git_host = github.com
-git_username = ed-dillinger
+git_username = tvaddonsco
 
 [addons]
 # addons - A comma separated list of addons to include in the repo
-addons_list = script.module.commoncore, plugin.git.browser
+addons_list = script.module.commoncore, plugin.git.browser, script.module.scrapecore, resource.scrapecore.main, plugin.video.tva.neo
  
 
 

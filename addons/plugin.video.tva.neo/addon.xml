@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<addon id="plugin.video.tva.neo" name="Neo" provider-name="tvaddons" version="0.5.0">
+  <requires>
+    <import addon="xbmc.python" version="2.20.0" />
+    <import addon="script.module.commoncore" />
+    <import addon="script.module.scrapecore" />
+    <import addon="script.trakt" />
+    <import addon="service.fanart.proxy" optional="true" />
+    <import addon="master.control" optional="true" />
+  </requires>
+  <extension library="addon.py" point="xbmc.python.pluginsource">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">The Fight for the Future Begins</summary>
+    <description lang="en">Watch TV and Movies using ScrapeCore</description>
+    <platform>all</platform>
+	<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+    <forum>http://tvaddons.co/forums</forum>
+    <website>http://www.tvaddons.co/</website>
+  </extension>
+</addon>

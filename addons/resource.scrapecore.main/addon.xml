@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<addon id="resource.scrapecore.main" name="ScrapeCore Main" provider-name="tvaddons" version="0.1.0">
+	<extension point="kodi.resource.images" type="scrapecore" />
+	<requires>
+		<import addon="kodi.resource" version="1.0.0" />
+	</requires>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">ScrapeCore Main Scrapers</summary>
+		<description lang="en">The default collection of ScrapeCore scrapers.</description>
+		<platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+        <forum>http://tvaddons.co/forums</forum>
+        <website>http://www.tvaddons.co/</website>
+	</extension>
+</addon>
