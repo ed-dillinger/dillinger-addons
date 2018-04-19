@@ -43,7 +43,15 @@ config.read('config/config.txt')
 
 base_git_url = "git@%s:%s" % (config.get('git', 'git_host'), config.get('git', 'git_username'))
 addon_list = [ a.strip() for a in config.get('addons', 'addons_list').split(",")]
-print base_git_url
+try:
+	user_map = {}
+	temp = config.get('addons', 'user_map').split(",")
+	for t in temp:
+		t = t.split(":")
+		user_map[t[0]] = t[1]
+except:
+	user_map = {}
+
 class BuildException(Exception):
 	pass
 
@@ -134,13 +142,17 @@ def compile_addon(addon_id):
 	global root_dir, addon_dir, work_dir
 	if addon_id not in addon_list:
 		raise BuildException("Unknown addon_id")
-	git_url = "%s/%s.git" % (base_git_url, addon_id)
+	if addon_id in user_map:
+		git_url = "git@%s:%s/%s.git" % (config.get('git', 'git_host'), user_map[addon_id], addon_id)
+	else:
+		git_url = "%s/%s.git" % (base_git_url, addon_id)
 	print git_url
 	output_path = os.path.join(work_dir, addon_id)
 	shutil.rmtree(output_path, ignore_errors=True)
 	os.system("git clone %s %s" % (git_url, output_path))
 	shutil.rmtree("work/%s/.git" % addon_id, ignore_errors=True)
-	os.remove("work/%s/.gitignore" % addon_id)
+	try: os.remove("work/%s/.gitignore" % addon_id)
+	except: pass
 	tree = ET.parse(os.path.join(output_path, "addon.xml"))
 	root = tree.getroot()
 	for addon in root.iter('addon'):

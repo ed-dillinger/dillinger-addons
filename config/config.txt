@@ -5,6 +5,10 @@ git_username = ed-dillinger
 [addons]
 # addons - A comma separated list of addons to include in the repo
 addons_list = script.module.commoncore, plugin.git.browser
- 
 
+# user_map - A comma separated list of addon/username mappings
+user_map = script.module.commoncore:tvaddonsco
+
+# user_map - A comma separated list of host/username mappings
+;host_map = plugin.video.test:test.com
 
