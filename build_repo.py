@@ -41,7 +41,7 @@ parser.add_option("-i", action="store_true", dest="Interactive", help="Full Inte
 config = ConfigParser.ConfigParser()
 config.read('config/config.txt')
 
-base_git_url = "git@%s:%s" % (config.get('git', 'git_host'), config.get('git', 'git_username'))
+#base_git_url = "git@%s:%s" % (config.get('git', 'git_host'), config.get('git', 'git_username'))
 addon_list = [ a.strip() for a in config.get('addons', 'addons_list').split(",")]
 try:
 	user_map = {}
@@ -51,6 +51,15 @@ try:
 		user_map[t[0]] = t[1]
 except:
 	user_map = {}
+
+try:
+	host_map = {}
+	temp = config.get('addons', 'host_map').split(",")
+	for t in temp:
+		t = t.split(":")
+		host_map[t[0]] = t[1]
+except:
+	host_map = {}
 
 class BuildException(Exception):
 	pass
@@ -142,10 +151,9 @@ def compile_addon(addon_id):
 	global root_dir, addon_dir, work_dir
 	if addon_id not in addon_list:
 		raise BuildException("Unknown addon_id")
-	if addon_id in user_map:
-		git_url = "git@%s:%s/%s.git" % (config.get('git', 'git_host'), user_map[addon_id], addon_id)
-	else:
-		git_url = "%s/%s.git" % (base_git_url, addon_id)
+	host = host_map[addon_id] if addon_id in host_map else config.get('git', 'git_host')	
+	username = user_map[addon_id] if addon_id in user_map else config.get('git', 'git_username')
+	git_url = "git@%s:%s/%s.git" % (host, username, addon_id)
 	print git_url
 	output_path = os.path.join(work_dir, addon_id)
 	shutil.rmtree(output_path, ignore_errors=True)

@@ -12,7 +12,7 @@
         <platform>all</platform>
     </extension>
 </addon>
-<addon id="script.module.commoncore" name="CommonCore" provider-name="EDDillinger" version="0.1.0">
+<addon id="script.module.commoncore" name="CommonCore" provider-name="tvaddons" version="0.1.2">
     <requires>
         <import addon="xbmc.python" version="2.1.0" />
         <import addon="script.module.requests" />
@@ -24,13 +24,12 @@
         <summary lang="en">CommonCore</summary>
         <description lang="en">Not your grandmother's math.</description>
         <disclaimer lang="en" />
-        <language />
         <platform>all</platform>
-        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
         <forum>http://tvaddons.co/forums</forum>
         <website>http://www.tvaddons.co/</website>
     </extension>
-</addon><addon author="tvaddons" id="plugin.git.browser" name="Git Browser" version="1.1.0">
+</addon><addon author="tvaddons" id="plugin.git.browser" name="Git Browser" version="1.1.1">
     <requires>
         <import addon="xbmc.python" version="2.1.0" />
         <import addon="script.module.commoncore" />
