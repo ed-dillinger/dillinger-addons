@@ -48,7 +48,7 @@ try:
 	temp = config.get('addons', 'user_map').split(",")
 	for t in temp:
 		t = t.split(":")
-		user_map[t[0]] = t[1]
+		user_map[t[0].strip()] = t[1].strip()
 except:
 	user_map = {}
 
@@ -57,7 +57,7 @@ try:
 	temp = config.get('addons', 'host_map').split(",")
 	for t in temp:
 		t = t.split(":")
-		host_map[t[0]] = t[1]
+		host_map[t[0].strip()] = t[1].strip()
 except:
 	host_map = {}
 
@@ -154,7 +154,7 @@ def compile_addon(addon_id):
 	host = host_map[addon_id] if addon_id in host_map else config.get('git', 'git_host')	
 	username = user_map[addon_id] if addon_id in user_map else config.get('git', 'git_username')
 	git_url = "git@%s:%s/%s.git" % (host, username, addon_id)
-	print git_url
+	print git_url 
 	output_path = os.path.join(work_dir, addon_id)
 	shutil.rmtree(output_path, ignore_errors=True)
 	os.system("git clone %s %s" % (git_url, output_path))

@@ -1,14 +1,21 @@
 [git]
+# The enter your git paramaters for generating the basic git urls.
+# Authentication should be done via key based authentication.
+# See https://help.github.com/articles/connecting-to-github-with-ssh/ for details
+# The basic git url to generate is git@{git_host}:{git_username}/
 git_host = github.com
 git_username = ed-dillinger
 
 [addons]
 # addons - A comma separated list of addons to include in the repo
-addons_list = script.module.commoncore, plugin.git.browser
+addons_list = script.module.commoncore, plugin.git.browser, plugin.video.tva.neo, resource.artwork.neo, script.module.scrapecore, resource.scrapecore.main, service.core.playback, service.fanart.proxy
 
 # user_map - A comma separated list of addon/username mappings
-user_map = script.module.commoncore:tvaddonsco
+# The git_username will be overridden if an ADDON_ID is found
+# The following would result in git@github.com:tvaddonsco/script.module.commoncore.git
+user_map = script.module.commoncore:tvaddonsco, plugin.video.tva.neo:tvaddonsco, script.module.scrapecore:tvaddonsco, resource.scrapecore.main:tvaddonsco, service.fanart.proxy:tvaddonsco
 
 # user_map - A comma separated list of host/username mappings
+# The git_host will be overridden if an ADDON_ID is found
 ;host_map = plugin.video.test:test.com
 

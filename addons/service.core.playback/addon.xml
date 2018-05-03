@@ -1,19 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
-<addon id="script.module.scrapecore" name="ScrapeCore" provider-name="tvaddons" version="1.0.5">
+<addon id="service.core.playback" name="CommonCore Service" provider-name="tvaddons" version="0.2.0">
     <requires>
         <import addon="xbmc.python" version="2.1.0" />
         <import addon="script.module.commoncore" />
-        <import addon="resource.scrapecore.main" />
-        <import addon="master.control" optional="true" />
     </requires>
-    <extension library="addon.py" point="xbmc.python.pluginsource">
-        <provides>executable</provides>
-    </extension>
-    <extension library="lib" point="xbmc.python.module" />
+    <extension library="service.py" point="xbmc.service" start="startup" />
+	<extension library="lib" point="xbmc.python.module" />
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
-        <summary lang="en">Scraper Services</summary>
-        <description lang="en">An extensible site scraping module.</description>
+        <summary lang="en">Do some playback stuff</summary>
+        <description lang="en" />
         <disclaimer lang="en" />
         <language />
         <platform>all</platform>

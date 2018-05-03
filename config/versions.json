@@ -1,1 +1,1 @@
-{"plugin.git.browser": "1.1.2", "script.module.commoncore": "0.1.3"}
+{"service.fanart.proxy": "1.0.3", "script.module.commoncore": "1.1.14", "resource.scrapecore.main": "1.0.2", "script.module.scrapecore": "1.0.5", "plugin.git.browser": "1.1.5", "service.core.playback": "0.2.0", "plugin.video.tva.neo": "1.0.6"}
