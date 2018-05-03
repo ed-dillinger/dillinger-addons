@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<addon id="resource.artwork.neo" name="ScrapeCore Neo Skin" provider-name="ED Dillinger" version="1.0.0">
+	<extension point="kodi.resource.images" type="scrapecore" />
+	<requires>
+		<import addon="kodi.resource" version="1.0.0" />
+	</requires>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Neo Skin</summary>
+		<description lang="en">Neo Skin</description>
+		<platform>all</platform>
+	</extension>
+</addon>

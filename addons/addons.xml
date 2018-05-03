@@ -95,6 +95,16 @@
     <forum>http://tvaddons.co/forums</forum>
     <website>http://www.tvaddons.co/</website>
   </extension>
+</addon><addon id="resource.artwork.neo" name="ScrapeCore Neo Skin" provider-name="ED Dillinger" version="1.0.0">
+	<extension point="kodi.resource.images" type="scrapecore" />
+	<requires>
+		<import addon="kodi.resource" version="1.0.0" />
+	</requires>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Neo Skin</summary>
+		<description lang="en">Neo Skin</description>
+		<platform>all</platform>
+	</extension>
 </addon><addon id="script.module.scrapecore" name="ScrapeCore" provider-name="tvaddons" version="1.0.5">
     <requires>
         <import addon="xbmc.python" version="2.1.0" />
