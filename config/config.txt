@@ -15,7 +15,7 @@ addons_list = script.module.commoncore, plugin.git.browser, plugin.video.tva.neo
 # The following would result in git@github.com:tvaddonsco/script.module.commoncore.git
 user_map = script.module.commoncore:tvaddonsco, plugin.video.tva.neo:tvaddonsco, script.module.scrapecore:tvaddonsco, resource.scrapecore.main:tvaddonsco, service.fanart.proxy:tvaddonsco
 
-# user_map - A comma separated list of host/username mappings
+# host_map - A comma separated list of host/username mappings
 # The git_host will be overridden if an ADDON_ID is found
 ;host_map = plugin.video.test:test.com
 
