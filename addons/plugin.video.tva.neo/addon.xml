@@ -1,10 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<addon id="plugin.video.tva.neo" name="Neo" provider-name="tvaddons" version="1.0.6">
+<addon id="plugin.video.tva.neo" name="Neo" provider-name="tvaddons" version="1.0.7">
   <requires>
     <import addon="xbmc.python" version="2.20.0" />
     <import addon="script.module.commoncore" />
     <import addon="script.module.scrapecore" />
     <import addon="service.core.playback" />
+    <import addon="resource.artwork.neo" />
     <import addon="script.trakt" />
     <import addon="service.fanart.proxy" optional="true" />
     <import addon="master.control" optional="true" />

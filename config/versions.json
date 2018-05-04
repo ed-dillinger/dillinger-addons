@@ -1,1 +1,1 @@
-{"service.fanart.proxy": "1.0.3", "script.module.commoncore": "1.1.14", "resource.scrapecore.main": "1.0.2", "script.module.scrapecore": "1.0.5", "resource.artwork.neo": "1.0.0", "plugin.git.browser": "1.1.5", "service.core.playback": "0.2.0", "plugin.video.tva.neo": "1.0.6"}
+{"service.fanart.proxy": "1.0.3", "plugin.git.browser": "1.1.5", "resource.scrapecore.main": "1.0.2", "script.module.scrapecore": "1.0.5", "resource.artwork.neo": "1.0.0", "script.module.commoncore": "1.1.14", "service.core.playback": "0.2.0", "plugin.video.tva.neo": "1.0.7"}
