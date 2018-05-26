@@ -1,8 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<addon id="script.module.scrapecore" name="ScrapeCore" provider-name="tvaddons" version="1.0.5">
+<addon id="script.module.scrapecore" name="ScrapeCore" provider-name="tvaddons" version="1.1.0">
     <requires>
         <import addon="xbmc.python" version="2.1.0" />
         <import addon="script.module.commoncore" />
+        <import addon="script.module.youtube.dl" />
         <import addon="resource.scrapecore.main" />
         <import addon="master.control" optional="true" />
     </requires>
