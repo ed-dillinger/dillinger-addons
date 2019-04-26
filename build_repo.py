@@ -214,8 +214,7 @@ def compile_addon(addon_id):
 		cur_version = addon.get('version')
 		addon_name = addon.get('name')
 		break
-	c = raw_input("Compile %s [N]: " % addon_name).strip()
-	if c.lower() != "y": return
+
 	if addon_id in version_list:
 		cur_version = version_list[addon_id]["version"]
 		if 'hash' in version_list[addon_id]:
@@ -225,12 +224,16 @@ def compile_addon(addon_id):
 	else:
 		cur_version = '0.0.0'
 		prev_hash = ''
-	prompt_string = "%s Version [%s]: " % (addon_name, cur_version)
+
 	if cur_hash == prev_hash:
-		prompt_string = COLORS.GREEN + prompt_string + COLORS.END
+		prompt_string = "{color}Compile {addon}{end} [N]: ".format(color=COLORS.GREEN, addon=addon_name, end=COLORS.END)
 	else:
-		prompt_string = COLORS.RED + prompt_string + COLORS.END
-	version = raw_input(prompt_string).strip()
+		prompt_string = "{color}Compile {addon}{end} [N]: ".format(color=COLORS.RED, addon=addon_name, end=COLORS.END)
+
+	c = raw_input(prompt_string).strip()
+	if c.lower() != "y": return
+	
+	version = raw_input("%s Version [%s]: " % (addon_name, cur_version)).strip()
 	version = get_version(version, cur_version)
 	if not version: raise BuildException("Version Error: Invalid version format.")
 	print "Setting %s version to %s" % (addon_name, version)
