@@ -6,6 +6,11 @@
 git_host = github.com
 git_username = ed-dillinger
 
+[directories]
+# Directory specification. Leave these alone unless you have to change them.
+work_dir = work
+output_dir = addons
+
 [addons]
 # addons - A comma separated list of addons to include in the repo
 addons_list = script.module.commoncore, plugin.git.browser, plugin.video.tva.neo, plugin.video.scrapecore.bowser, resource.artwork.neo, script.module.scrapecore, resource.scrapecore.main, service.core.playback, service.fanart.proxy
