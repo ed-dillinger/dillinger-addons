@@ -15,6 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *'''
+
 import re
 import os
 import sys
@@ -37,11 +38,23 @@ parser.add_option("-l", "--list", action="store_true", dest="LIST", help="List A
 parser.add_option("-i", action="store_true", dest="Interactive", help="Full Interative mode", default=True)
 (options, args) = parser.parse_args()
 
+CONFIG_DIR = 'config'
+CONFIG_FILE = 'config/config.txt'
+class COLORS:
+	GRAY 	= '\033[1;30;40m'
+	RED 	= '\033[1;31;40m'
+	GREEN 	= '\033[1;32;40m'	
+	YELLOW 	= '\033[1;33;40m'
+	BLUE 	= '\033[1;34;40m'
+	MAGENTA = '\033[1;35;40m'
+	CYAN 	= '\033[1;36;40m'
+	WHITE 	= '\033[1;37;40m'
+	END 	= '\033[0m'
+
 # Load configuration from config/config.txt
 config = ConfigParser.ConfigParser()
-config.read('config/config.txt')
+config.read(CONFIG_FILE)
 
-#base_git_url = "git@%s:%s" % (config.get('git', 'git_host'), config.get('git', 'git_username'))
 addon_list = [ a.strip() for a in config.get('addons', 'addons_list').split(",")]
 try:
 	user_map = {}
@@ -69,11 +82,29 @@ Check the repo is uptodate before we proceed.
 
 *'''
 
-#status = subprocess.check_output(['./check_repo', '']).strip()
-#if status != "Up-to-date":
-#	raise BuildException("Repository Status: %s" % status)	
-#	sys.exit()
-#
+status = subprocess.check_output(['./check_repo', '']).strip()
+if status != "Up-to-date":
+	print "Repository is out of sync with remote"
+	if status == "Need to push":
+		print "Local is ahead of remote."
+		print "Push required to sync."
+		c = raw_input(COLORS.MAGENTA + "Push changes now?" + COLORS.END + " [N]: ").strip()
+		if c.lower() == 'y':
+			os.system('git push')
+		else:
+			raise BuildException("Repository Status: %s" % status)	
+			sys.exit()
+	elif status == "Need to pull":
+		print "Local is behind remote."
+		print "Pull required to sync."
+		c = raw_input(COLORS.MAGENTA + "Pull now?" + COLORS.END + " [N]: ").strip()
+		if c.lower() == 'y':
+			os.system('git pull')
+	else:
+		raise BuildException("Repository Status: %s" % status)	
+		sys.exit()
+
+
 '''*
 
 Simple build script for maintaining repo versions and packaging addons for release.
@@ -89,12 +120,16 @@ Version prompts:
 
 ''' Define paths here '''
 root_dir = os.path.dirname(os.path.abspath(inspect.stack()[0][1]))
-addon_dir = os.path.join(root_dir, "addons")
-work_dir = os.path.join(root_dir, "work")
-if not os.path.exists(work_dir): os.mkdir(work_dir)
+addon_path = config.get('directories', 'output_dir')
+work_path = os.path.join(root_dir, "work")
+addon_dir = os.path.join(root_dir, addon_path)
+work_dir = os.path.join(root_dir, work_path)
+
+for d in [addon_dir, work_dir]:
+	if not os.path.exists(d): os.mkdir(d)
 
 ''' load version file if exists '''
-version_file = os.path.join("config/versions.json")
+version_file = os.path.join("%s/versions.json" % CONFIG_DIR)
 if os.path.exists(version_file):
 	version_list = json.loads(open(version_file, "r").read())
 else:
@@ -143,7 +178,16 @@ def md5(fname):
 			hash_md5.update(chunk)
 	return hash_md5.hexdigest()
 
-addons_tree = ET.parse(os.path.join(addon_dir, "addons.xml"))
+addons_path = os.path.join(addon_dir, "addons.xml")
+
+
+if not os.path.exists(addons_path):
+	print "addons.xml is missing"
+	print "writing blank template"
+	shutil.copy("config/addons.xml.template", addons_path)
+		
+	#raise BuildException('addons.xml missing')
+addons_tree = ET.parse(addons_path)
 addons_root = addons_tree.getroot()
 
 def compile_addon(addon_id):
@@ -158,8 +202,11 @@ def compile_addon(addon_id):
 	output_path = os.path.join(work_dir, addon_id)
 	shutil.rmtree(output_path, ignore_errors=True)
 	os.system("git clone %s %s" % (git_url, output_path))
-	shutil.rmtree("work/%s/.git" % addon_id, ignore_errors=True)
-	try: os.remove("work/%s/.gitignore" % addon_id)
+	ref_path = "%s/%s/.git/packed-refs" % (work_path, addon_id)
+	with open(ref_path, "r") as ref:
+		cur_hash = re.search("(\S+)\srefs", ref.read()).group(1)
+	shutil.rmtree("%s/%s/.git" % (work_path, addon_id), ignore_errors=True)
+	try: os.remove("%s/%s/.gitignore" % (work_path, addon_id))
 	except: pass
 	tree = ET.parse(os.path.join(output_path, "addon.xml"))
 	root = tree.getroot()
@@ -169,12 +216,26 @@ def compile_addon(addon_id):
 		break
 	c = raw_input("Compile %s [N]: " % addon_name).strip()
 	if c.lower() != "y": return
-	if addon_id in version_list: cur_version = version_list[addon_id]
-	version = raw_input("%s Version [%s]: " % (addon_name, cur_version)).strip()
+	if addon_id in version_list:
+		cur_version = version_list[addon_id]["version"]
+		if 'hash' in version_list[addon_id]:
+			prev_hash = version_list[addon_id]['hash']
+		else:
+			prev_hash = ""
+	else:
+		cur_version = '0.0.0'
+		prev_hash = ''
+	prompt_string = "%s Version [%s]: " % (addon_name, cur_version)
+	if cur_hash == prev_hash:
+		prompt_string = COLORS.GREEN + prompt_string + COLORS.END
+	else:
+		prompt_string = COLORS.RED + prompt_string + COLORS.END
+	version = raw_input(prompt_string).strip()
 	version = get_version(version, cur_version)
 	if not version: raise BuildException("Version Error: Invalid version format.")
 	print "Setting %s version to %s" % (addon_name, version)
-	version_list[addon_id] = version
+	version_list[addon_id]["version"] = version
+	version_list[addon_id]["hash"] = cur_hash
 	for addon in root.iter('addon'):
 		addon.set('version', version)
 		break
@@ -182,25 +243,25 @@ def compile_addon(addon_id):
 		if addon_id == a.get('id'):
 			addons_root.remove(a)
 	addons_root.append(root)
-	if not os.path.exists("addons/%s" % addon_id): os.mkdir("addons/%s" % addon_id)
+	if not os.path.exists("%s/%s" % (addon_path, addon_id)): os.mkdir("%s/%s" % (addon_path, addon_id))
 	''' update xml '''
 	print "Updating addons.xml file"
 	output_xml = os.path.join(output_path, "addon.xml")
-	dir_xml = os.path.join("addons/%s/addon.xml" % addon_id)
+	dir_xml = os.path.join("%s/%s/addon.xml" % (addon_path, addon_id))
 	if os.path.exists(output_xml): os.remove(output_xml)
 	if os.path.exists(dir_xml): os.remove(dir_xml)
 	tree.write(output_xml, xml_declaration=True, encoding='utf-8')
 	tree.write(dir_xml, xml_declaration=True, encoding='utf-8')
 	for f in ['fanart.jpg', 'icon.png']:
-		src = "work/%s/%s" % (addon_id, f)
+		src = "%s/%s/%s" % (work_path, addon_id, f)
 		if os.path.exists(src):
-			dst = "addons/%s/%s" % (addon_id, f)
+			dst = "%s/%s/%s" % (addon_path, addon_id, f)
 			shutil.copy(src, dst)
-	output_zip = "addons/%s/%s-%s.zip" % (addon_id, addon_id, version)
+	output_zip = "%s/%s/%s-%s.zip" % (addon_path, addon_id, addon_id, version)
 	if os.path.exists(output_zip):
 		os.remove(output_zip)
 	zipf = zipfile.ZipFile(output_zip, 'w', zipfile.ZIP_DEFLATED)
-	zipdir('work/%s' % addon_id, zipf, addon_id)
+	zipdir('%s/%s' % (work_path, addon_id), zipf, addon_id)
 	zipf.close()
 
 if __name__ == '__main__':
@@ -212,7 +273,7 @@ if __name__ == '__main__':
 		for addon_id in addon_list:
 			compile_addon(addon_id)
 
-	output_f = 'addons/addons.xml'
+	output_f = '%s/addons.xml' % addon_path
 	addons_tree.write(output_f, xml_declaration=True, encoding='utf-8')
 	check = md5(output_f)
 	print "Writing %s and md5" % output_f
@@ -221,14 +282,19 @@ if __name__ == '__main__':
 	open(version_file , 'w').write(json.dumps(version_list))
 
 	''' Add new files '''
-	os.system("git add addons")
-	message = strftime("Updated at %D %T")
-	os.system('git commit -a -m "%s"' % message)
-	c = raw_input("Push changes? [N]: ").strip()
+	c = raw_input(COLORS.YELLOW + "Commit changes?" + COLORS.END + " [Y]: ").strip()
+	if c.lower() != 'n':
+		os.system("git add %s" % addon_path)
+		message = strftime("Updated at %D %T")
+		os.system('git commit -a -m "%s"' % message)
+	else:
+		sys.exit()
+	c = raw_input(COLORS.YELLOW + "Push changes?" + COLORS.END + " [N]: ").strip()
 	if c.lower() == 'y':
 		os.system('git push')
-	
-	print "Complete!"
-	#print "Don't forget to commit your changes"
+		print "Complete!"
+	else:
+		print COLORS.RED + "Don't forget to commit your changes" + COLORS.END
+
 
 

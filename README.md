@@ -1,6 +1,9 @@
 ED Dillinger Repository
 Repository managed by build_repo.py
 build_repo is a short python script for automating management of a small kodi repository hosted on a git server.
+
+See https://github.com/ed-dillinger/build_repo
+
 Usage: build_repo.py [options]
 
 Options:
@@ -12,8 +15,8 @@ Options:
   -l, --list            List Addons
   -i                    Full Interative mode
 
-Configuration is through ./config.txt
-See ./config.txt for configuration details.
+Configuration is through ./config/config.txt 
+See ./config/config.txt for configuration details.
 
 Interactive mode prompts for each configured ADDONID to compiled and the new version number.
 Finally changes are commited and pushed.
