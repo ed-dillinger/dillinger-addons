@@ -2,7 +2,11 @@
 # The enter your git paramaters for generating the basic git urls.
 # Authentication should be done via key based authentication.
 # See https://help.github.com/articles/connecting-to-github-with-ssh/ for details
-# The basic git url to generate is git@{git_host}:{git_username}/
+# The basic git url to generate is:
+#	ssh protocol: git@{git_host}:{git_username}/
+#	http protocol: https://{git_host}/{git_username}/
+
+git_protocol = ssh
 git_host = github.com
 git_username = ed-dillinger
 
