@@ -210,6 +210,7 @@ def compile_addon(addon_id):
 	version = get_version(version, cur_version)
 	if not version: raise BuildException("Version Error: Invalid version format.")
 	if options.Verbose: print "Setting %s version to %s" % (addon_name, version)
+	if addon_id not in version_list: version_list[addon_id] = {}
 	version_list[addon_id]["version"] = version
 	version_list[addon_id]["hash"] = cur_hash
 	for addon in root.iter('addon'):
