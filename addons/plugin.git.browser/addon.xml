@@ -1,8 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<addon author="tvaddons" id="plugin.git.browser" name="Git Browser" version="1.1.6">
+<addon author="tvaddons" id="plugin.git.browser" name="Git Browser" version="1.2.0">
     <requires>
         <import addon="xbmc.python" version="2.1.0" />
-        <import addon="script.module.commoncore" />
+        <import addon="script.module.requests" />
+        <import addon="script.module.myconnpy" option="true" />
     </requires>
     <extension library="addon.py" point="xbmc.python.pluginsource">
         <provides>executable</provides>

@@ -17,12 +17,12 @@ output_dir = addons
 
 [addons]
 # addons - A comma separated list of addons to include in the repo
-addons_list = script.module.commoncore, plugin.git.browser, plugin.video.tva.neo, plugin.video.scrapecore.bowser, resource.artwork.neo, script.module.scrapecore, resource.scrapecore.main, service.core.playback, service.fanart.proxy
+addons_list = script.module.commoncore, plugin.git.browser, service.fanart.proxy, service.pyftpd
 
 # user_map - A comma separated list of addon/username mappings
 # The git_username will be overridden if an ADDON_ID is found
 # The following would result in git@github.com:tvaddonsco/script.module.commoncore.git
-user_map = script.module.commoncore:tvaddonsco, plugin.video.tva.neo:tvaddonsco, script.module.scrapecore:tvaddonsco, resource.scrapecore.main:tvaddonsco, service.fanart.proxy:tvaddonsco
+user_map = script.module.commoncore:tvaddonsco, service.fanart.proxy:tvaddonsco
 
 # host_map - A comma separated list of host/username mappings
 # The git_host will be overridden if an ADDON_ID is found

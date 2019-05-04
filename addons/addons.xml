@@ -56,24 +56,6 @@
         <forum>http://tvaddons.co/forums</forum>
         <website>http://www.tvaddons.co/</website>
     </extension>
-</addon><addon author="tvaddons" id="plugin.git.browser" name="Git Browser" version="1.1.6">
-    <requires>
-        <import addon="xbmc.python" version="2.1.0" />
-        <import addon="script.module.commoncore" />
-    </requires>
-    <extension library="addon.py" point="xbmc.python.pluginsource">
-        <provides>executable</provides>
-    </extension>
-    <extension library="service.py" point="xbmc.service" start="startup" />
-    <extension point="xbmc.addon.metadata">
-        <summary lang="en">Install Kodi Addons directly from GitHub</summary>
-        <description lang="en">Git Browser for Kodi. Using this tool, you'll be able to install any Kodi addon that is developed or distributed through GitHub.</description>
-        <disclaimer lang="en">Kodi is a registered trademark of the XBMC Foundation. We are not connected to or in any other way affiliated with Kodi, Team Kodi, or the XBMC Foundation. Furthermore, any software, addons, or products offered by us will receive no support in official Kodi channels, including the Kodi forums and various social networks.</disclaimer>
-        <language>en</language>
-        <platform>all</platform>
-        <forum>https://www.tvaddons.co/forums</forum>
-        <website>https://www.tvaddons.co</website>
-    </extension>
 </addon><addon id="plugin.video.tva.neo" name="Neo" provider-name="tvaddons" version="1.1.0">
   <requires>
     <import addon="xbmc.python" version="2.20.0" />
@@ -194,5 +176,41 @@
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
         <forum>http://tvaddons.co/forums</forum>
         <website>http://www.tvaddons.co/</website>
+    </extension>
+</addon><addon author="tvaddons" id="plugin.git.browser" name="Git Browser" version="1.2.0">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0" />
+        <import addon="script.module.requests" />
+        <import addon="script.module.myconnpy" option="true" />
+    </requires>
+    <extension library="addon.py" point="xbmc.python.pluginsource">
+        <provides>executable</provides>
+    </extension>
+    <extension library="service.py" point="xbmc.service" start="startup" />
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Install Kodi Addons directly from GitHub</summary>
+        <description lang="en">Git Browser for Kodi. Using this tool, you'll be able to install any Kodi addon that is developed or distributed through GitHub.</description>
+        <disclaimer lang="en">Kodi is a registered trademark of the XBMC Foundation. We are not connected to or in any other way affiliated with Kodi, Team Kodi, or the XBMC Foundation. Furthermore, any software, addons, or products offered by us will receive no support in official Kodi channels, including the Kodi forums and various social networks.</disclaimer>
+        <language>en</language>
+        <platform>all</platform>
+        <forum>https://www.tvaddons.co/forums</forum>
+        <website>https://www.tvaddons.co</website>
+    </extension>
+</addon><addon id="service.pyftpd" name="PyFTPd Server" provider-name="EDDillinger" version="0.9.0">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0" />
+        <import addon="script.module.pyopenssl" optional="true" />
+        <import addon="script.module.six" optional="true" />
+    </requires>
+    <extension library="service.py" point="xbmc.service" start="startup" />
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">Provides FTP server.</summary>
+        <description lang="en">FTP server implementation by ED Dillinger.</description>
+        <disclaimer lang="en" />
+        <language />
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <website>http://www.tvaddons.co/forum/</website>
     </extension>
 </addon></addons>
