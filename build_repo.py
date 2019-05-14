@@ -45,7 +45,7 @@ parser.add_option("-u", "--update", action="store_true", dest="Update", help="Up
 parser.add_option("-l", "--list", action="store_true", dest="LIST", help="Print List Addons of addons and exit", default=False)
 parser.add_option("-i", action="store_true", dest="Interactive", help="Full Interative mode, default mode", default=True)
 parser.add_option("--init", action="store_true", dest="INIT", help="Initialize a new addons.xml", default=False)
-parser.add_option("-n", "--new", action="store_true", dest="NEW", help="Compile a new addons", default=False)
+parser.add_option("-n", "--new", action="store_true", dest="NEW", help="Compile new addons", default=False)
 parser.add_option("-d", "--dry-run", action="store_true", dest="DryRun", help="Dry Run, Do not write any files or make commits", default=False)
 parser.add_option("-v", "--verbose", action="store_true", dest="Verbose", help="Verbose output", default=False)
 (options, args) = parser.parse_args()
@@ -234,7 +234,7 @@ def compile_addon(addon_id):
 		prompt_string = "{color}Compile {addon}{end} [N]: ".format(color=COLORS.GREEN, addon=addon_name, end=COLORS.END)
 	else:
 		prompt_string = "{color}Compile {addon}{end} [N]: ".format(color=COLORS.RED, addon=addon_name, end=COLORS.END)
-
+	if options.NEW and cur_hash == prev_hash: return
 	c = raw_input(prompt_string).strip()
 	if c.lower() != "y": return
 	
@@ -345,21 +345,18 @@ if __name__ == '__main__':
 			print "\t%s: %s" % (a, v)
 		sys.exit()
 	elif options.BuildID is not None:
-		check_repo()
 		if options.BuildID in addon_list:
 			compile_addon(options.BuildID)
 			output_xml()
 		else:
 			raise BuildException("Invalid addon id: %s" % options.BuildID)
 	elif options.AddonID is not None:
-		check_repo()
 		if options.AddonID in addon_list:
 			compile_addon(options.AddonID)
 			output_xml()
 		else:
 			raise BuildException("Invalid addon id: %s" % options.AddonID)
 	else:
-		check_repo()
 		map(compile_addon,addon_list)
 		output_xml()
 	if not options.DryRun:
