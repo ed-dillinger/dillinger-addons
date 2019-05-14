@@ -41,8 +41,11 @@ Fairly simple.
 parser = OptionParser()
 parser.add_option("-a", "--addon", dest="AddonID", help="Build a single specific Addon ID")
 parser.add_option("-b", "--build", dest="BuildID", help="Build a single specific Addon ID")
+parser.add_option("-u", "--update", action="store_true", dest="Update", help="Update build_addon Script", default=False)
 parser.add_option("-l", "--list", action="store_true", dest="LIST", help="Print List Addons of addons and exit", default=False)
 parser.add_option("-i", action="store_true", dest="Interactive", help="Full Interative mode, default mode", default=True)
+parser.add_option("--init", action="store_true", dest="INIT", help="Initialize a new addons.xml", default=False)
+parser.add_option("-n", "--new", action="store_true", dest="NEW", help="Compile a new addons", default=False)
 parser.add_option("-d", "--dry-run", action="store_true", dest="DryRun", help="Dry Run, Do not write any files or make commits", default=False)
 parser.add_option("-v", "--verbose", action="store_true", dest="Verbose", help="Verbose output", default=False)
 (options, args) = parser.parse_args()
@@ -63,8 +66,10 @@ class COLORS:
 # Load configuration from config/config.txt
 config = ConfigParser.ConfigParser()
 config.read(CONFIG_FILE)
-
-addon_list = [ a.strip() for a in config.get('addons', 'addons_list').split(",")]
+try:
+	addon_list = [ a.strip() for a in config.get('addons', 'addons_list').split(",")]
+except:
+	addon_list = []
 try:
 	user_map = {}
 	temp = config.get('addons', 'user_map').split(",")
@@ -110,19 +115,41 @@ addons_path = os.path.join(addon_dir, "addons.xml")
 
 for d in [addon_dir, work_dir]: 
 	if not os.path.exists(d): os.mkdir(d)
-if not os.path.exists(addons_path):
+	
+if not os.path.exists(addons_path) and not options.INIT:
 	print "addons.xml is missing"
-	print "writing blank template"
-	shutil.copy("config/addons.xml.template", addons_path)
+	print "initialize with build_repo.py --init"
+	raise BuildException("addons.xml is missing")
+	#print "addons.xml is missing"
 
-addons_tree = ET.parse(addons_path)
-addons_root = addons_tree.getroot()
+if not options.INIT:
+	addons_tree = ET.parse(addons_path)
+	addons_root = addons_tree.getroot()
+	
+	''' load version file if exists '''
+	version_file = os.path.join("%s/versions.json" % CONFIG_DIR)
+	if os.path.exists(version_file): version_list = json.loads(open(version_file, "r").read())
+	else: version_list = {}
 
-''' load version file if exists '''
-version_file = os.path.join("%s/versions.json" % CONFIG_DIR)
-if os.path.exists(version_file): version_list = json.loads(open(version_file, "r").read())
-else: version_list = {}
-
+def init_repo():
+	print "Setup a new repository"
+	print "Enter the following for a basic github repository"
+	repo_id = raw_input("Repository id (Ex repository.kodi.addons): ").strip()
+	repo_name = raw_input("Repository Name (Ex My Kodi Addons): ").strip()
+	repo_owner = raw_input("Repository Author (Ex Kodi Guy): ").strip()
+	repo_user = raw_input("Github Username (Ex Kodi-Guy): ").strip()
+	repo_dir = raw_input("Github Directory (Ex Kodi-Addons): ").strip()
+	print ""
+	with open("config/addons.xml.github.template", "r") as f:
+		raw_xml = f.read()
+		output_xml = raw_xml.format(repo_id=repo_id, repo_name=repo_name, repo_owner=repo_owner, repo_user=repo_user, repo_dir=repo_dir)
+		print output_xml
+	c = raw_input("Does this look correct [Y]?: ").strip()
+	if c.lower() != "n":
+		print "writing output %s" % addons_path
+		open(addons_path, "w").write(output_xml)
+	#shutil.copy("config/addons.xml.template", addons_path)
+	
 def get_version(i,c):
 	if re.match("^\d+\.\d+\.\d+$", i):
 		return i
@@ -155,9 +182,14 @@ def zipdir(path, ziph, addon_id):
 
 def md5(fname):
 	hash_md5 = hashlib.md5()
-	with open(fname, "rb") as f:
-		for chunk in iter(lambda: f.read(4096), b""):
+	if fname.startswith("http"):
+		r = requests.get(fname, stream=True)
+		for chunk in r.iter_content(4096):
 			hash_md5.update(chunk)
+	else:
+		with open(fname, "rb") as f:
+			for chunk in iter(lambda: f.read(4096), b""):
+				hash_md5.update(chunk)
 	return hash_md5.hexdigest()
 
 
@@ -286,25 +318,48 @@ def output_xml():
 
 if __name__ == '__main__':
 
-	if options.LIST:
+	if options.Update:
+		print "Checking for update"
+		remote = "https://raw.githubusercontent.com/ed-dillinger/build_repo/master/build_repo.py"
+		hash_this = md5('./build_repo.py')
+		hash_remote = md5(remote)
+		if hash_remote != hash_this:
+			print "New script found"
+			c = raw_input(COLORS.RED + "Update script?" + COLORS.END + " [N]: ").strip()
+			if c.lower() == 'y':
+				print "Downloading new script from: %s" % remote
+				with open('build_repo.py', "w") as f:
+					r = requests.get(remote)
+					f.write(r.text)
+		else:
+			print "build_repo.py is up to date"
+		sys.exit()
+	elif options.INIT:
+		print "Initialize repo"
+		init_repo()
+		sys.exit()
+	elif options.LIST:
 		print "Available addons in repository:"
 		for a in addon_list:
 			v = version_list[a] if a in version_list else 'None'
 			print "\t%s: %s" % (a, v)
 		sys.exit()
 	elif options.BuildID is not None:
+		check_repo()
 		if options.BuildID in addon_list:
 			compile_addon(options.BuildID)
 			output_xml()
 		else:
 			raise BuildException("Invalid addon id: %s" % options.BuildID)
 	elif options.AddonID is not None:
+		check_repo()
 		if options.AddonID in addon_list:
 			compile_addon(options.AddonID)
 			output_xml()
 		else:
 			raise BuildException("Invalid addon id: %s" % options.AddonID)
 	else:
+		check_repo()
 		map(compile_addon,addon_list)
 		output_xml()
 	if not options.DryRun:
@@ -320,7 +375,7 @@ if __name__ == '__main__':
 		c = raw_input(COLORS.YELLOW + "Push changes?" + COLORS.END + " [N]: ").strip()
 		if c.lower() == 'y':
 			os.system('git push')
-			print "Job Complete!"
+			print COLORS.GREEN + "Job Complete!" + COLORS.END
 		else:
 			print COLORS.RED + "Don't forget to push your changes!" + COLORS.END
 
